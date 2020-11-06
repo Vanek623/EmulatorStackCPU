@@ -19,10 +19,12 @@ private:
 
     quint8 dataRamBegin;
 
+    Command curCom;
+
 public:
     CPU();
 
-    void init(const QVector<Command> commands);
+    void init(const QVector<Command> *commands);
     bool work();
     void reset();
 
@@ -36,6 +38,9 @@ public:
 private:
     void runCommand();
 
-};
+    void nopOp();
+    void calcOp();
+    void stackOp();
+    void jumpOp();
 
-#endif // CPU_H
+};

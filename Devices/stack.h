@@ -17,13 +17,13 @@ public:
     Stack(const quint8 capacity);
 
     quint16 read() const;
-    quint16 pop() const;
+    quint16 pop();
 
     void drop();
     void push(const quint16 value);
 
     quint8 readFlags() const;
-    QVector<quint16> *getData() const;
+    QVector<quint16> *getData();
 
     void clear();
 

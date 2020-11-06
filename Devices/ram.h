@@ -17,7 +17,7 @@ public:
 
     void clear();
 
-    QVector<quint32> *getData() const;
+    QVector<quint32> *getData();
     quint8 size() const;
 
 private:
