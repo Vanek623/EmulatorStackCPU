@@ -6,10 +6,13 @@
 #include <QMainWindow>
 #include <QTextStream>
 #include <QFileDialog>
+#include <QListWidget>
+#include <QMessageBox>
 
 #include <QDebug>
 
 #include "cpu.h"
+#include "builder.h"
 
 namespace Ui {
 class MainWindow;
@@ -49,6 +52,9 @@ private:
     void updateFlags();
     void updateMemory();
     void updatePC();
+
+    QString toAnothSys(const int num, const int numSys, const int size) const;
+    void showStackData(Stack *stack, QListWidget *stackWidget);
 
 };
 

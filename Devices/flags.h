@@ -2,7 +2,7 @@
 
 enum Flags
 {
-    EMPTY = 0,
+    NONE = 0,
 
     NEGATIVE = 1,
     ZERO = 2,

@@ -35,7 +35,8 @@ SOURCES += \
     Devices/ram.cpp \
     Devices/cpu.cpp \
     mainwindow.cpp \
-    Builder/lexer.cpp
+    Builder/lexer.cpp \
+    Builder/builder.cpp
 
 HEADERS += \
     Devices/alu.h \
@@ -43,10 +44,11 @@ HEADERS += \
     Devices/ram.h \
     Devices/cpu.h \
     Devices/flags.h \
-    Builder/command.h \
     mainwindow.h \
     Builder/lexer.h \
-    Devices/consts.h
+    Devices/consts.h \
+    Builder/structs.h \
+    Builder/builder.h
 
 FORMS += \
     mainwindow.ui

@@ -4,7 +4,7 @@
 #include "ram.h"
 #include "stack.h"
 
-#include "command.h"
+#include "structs.h"
 
 class CPU
 {
@@ -28,9 +28,9 @@ public:
     bool work();
     void reset();
 
-    QVector<quint16> *getStackData() const;
-    QVector<quint32> *getMemData() const;
-    QVector<quint16> *getStackRevert() const;
+    Stack *getStackData();
+    RAM *getRAM();
+    Stack *getStackRevert();
 
     quint8 getPC() const;
     quint8 getFlags() const;

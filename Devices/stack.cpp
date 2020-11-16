@@ -4,36 +4,45 @@ Stack::Stack()
 {
     capacity = STACK_CAPACITY;
     pointer = 0;
-    flags = EMPTY;
+    flags = STACK_EMPTY;
+    stack = QVector<quint16>(capacity);
 }
 
 Stack::Stack(const quint8 capacity)
 {
     this->capacity = capacity;
     pointer = 0;
-    flags = EMPTY;
+    flags = STACK_EMPTY;
+    stack = QVector<quint16>(capacity);
 }
 
-quint16 Stack::read() const
+quint16 Stack::read()
 {
-    return data.at(pointer);
+    if(flags & STACK_EMPTY) return 0;
+    return stack.at(pointer);
 }
 
 quint16 Stack::pop()
 {
+    quint16 value = read();
     decreasePtr();
-    return read();
+
+    return value;
 }
 
 void Stack::drop()
 {
+    if(flags & STACK_EMPTY) return;
     decreasePtr();
 }
 
 void Stack::push(const quint16 value)
 {
-    data[pointer] = value;
     increasePtr();
+
+    if(flags & STACK_OVERFLOW) return;
+
+    stack[pointer] = value;
 }
 
 quint8 Stack::readFlags() const
@@ -43,33 +52,68 @@ quint8 Stack::readFlags() const
 
 QVector<quint16> *Stack::getData()
 {
-    return &data;
+    return &stack;
+}
+
+quint8 Stack::getPointer()
+{
+    return pointer;
+}
+
+bool Stack::isEmpty()
+{
+    return flags & STACK_EMPTY;
 }
 
 void Stack::clear()
 {
-    for(int i=0; i<capacity; i++) data[i] = 0;
+    if(stack.isEmpty()) return;
+    for(int i=0; i<capacity; i++) stack[i] = 0;
+
+    pointer = 0;
+    flags = STACK_EMPTY;
 }
 
 void Stack::fillZero()
 {
-    for(int i=0; i<capacity; i++) data.append(0);
+    for(int i=0; i<capacity; i++) stack.append(0);
 }
 
 void Stack::increasePtr()
 {
-    if(pointer < capacity - 1) pointer++;
+    bool hasPlace = pointer < capacity - 1;
+    bool isEmpty = (flags & STACK_EMPTY) > 0;
 
-    flags = EMPTY;
-    if(pointer == capacity - 1) flags |= STACK_OVERFLOW;
-    else if(pointer == 1) flags |= STACK_ONE;
+    if(hasPlace && !isEmpty)
+    {
+        flags = NONE;
+        pointer++;
+    }
+    else if(hasPlace && isEmpty)
+    {
+        flags = STACK_ONE;
+    }
+    else if(!hasPlace)
+    {
+        flags = STACK_OVERFLOW;
+    }
 }
 
 void Stack::decreasePtr()
 {
-    if(pointer > 0) pointer--;
+    bool isEmpty = (flags & STACK_EMPTY) > 0;
 
-    flags = EMPTY;
-    if(pointer == 0) flags |= STACK_EMPTY;
-    else if(pointer == 1) flags |= STACK_ONE;
+    if(isEmpty)
+    {
+        return;
+    }
+    else if(pointer == 0 && !isEmpty)
+    {
+        flags = STACK_EMPTY;
+    }
+    else
+    {
+        flags = pointer == 1 ? STACK_ONE : NONE;
+        pointer--;
+    }
 }

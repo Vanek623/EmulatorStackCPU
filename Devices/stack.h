@@ -8,7 +8,7 @@
 class Stack
 {
 private:
-    QVector<quint16> data;
+    QVector<quint16> stack;
     quint8 capacity;
     quint8 pointer;
     quint8 flags;
@@ -17,7 +17,7 @@ public:
     Stack();
     Stack(const quint8 capacity);
 
-    quint16 read() const;
+    quint16 read();
     quint16 pop();
 
     void drop();
@@ -25,6 +25,8 @@ public:
 
     quint8 readFlags() const;
     QVector<quint16> *getData();
+    quint8 getPointer();
+    bool isEmpty();
 
     void clear();
 
