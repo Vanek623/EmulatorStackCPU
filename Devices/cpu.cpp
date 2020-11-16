@@ -29,7 +29,7 @@ void CPU::reset()
     data.clear();
     revert.clear();
     memory.clear();
-    flags = 0;
+    flags = data.readFlags() | alu.readFlags();
     PC = 0;
 }
 
@@ -73,6 +73,8 @@ void CPU::runCommand()
     case ADDL:
     case SUB:
     case MUX:
+    case DEC:
+    case INC:
         calcOp();
         break;
     case SWAP:
@@ -82,12 +84,14 @@ void CPU::runCommand()
     case PUSHO:
     case PUSHM:
     case POPM:
+    case COPY:
         stackOp();
         break;
     case JZ:
     case JN:
     case JP:
     case JSO:
+    case JSE:
     case JMP:
         jumpOp();
         break;
@@ -103,11 +107,11 @@ void CPU::nopOp()
 
 void CPU::calcOp()
 {
-    if(curCom.operation == ADDS)
+    if(curCom.operation == ADDS || curCom.operation == INC)
     {
         quint16 a, b;
-        a = data.pop();
-        b = data.read();
+        a = curCom.operation == ADDS ? data.pop() : 1;
+        b = data.pop();
         data.push(a+b);
     }
     else if(curCom.operation == ADDL)
@@ -123,18 +127,18 @@ void CPU::calcOp()
         data.push(res >> 16);
 
     }
-    else if(curCom.operation == SUB)
+    else if(curCom.operation == SUB || curCom.operation == DEC)
     {
         quint16 a, b;
 
-        b = data.pop();
-        a = data.read();
+        b = curCom.operation == SUB ? data.pop() : 1;
+        a = data.pop();
 
         data.push(alu.sub(a, b));
     }
     else if(curCom.operation == MUX)
     {
-        quint32 res = alu.mux(data.pop(), data.read());
+        quint32 res = alu.mux(data.pop(), data.pop());
 
         data.push(res & 0xFFFF);
         data.push(res >> 16);
@@ -169,11 +173,21 @@ void CPU::stackOp()
     }
     else if(curCom.operation == PUSHM)
     {
-        data.push(static_cast<quint16>(memory.read(static_cast<quint8>(curCom.operand))));
+        quint16 address;
+        address = data.pop();
+
+        data.push(static_cast<quint16>(memory.read(static_cast<quint8>(address))));
     }
     else if(curCom.operation == POPM)
     {
-        memory.write(static_cast<quint8>(curCom.operand), data.pop());
+        quint16 address;
+        address = data.pop();
+
+        memory.write(static_cast<quint8>(address), data.pop());
+    }
+    else if(curCom.operation == COPY)
+    {
+        data.push(data.read());
     }
 }
 
@@ -189,11 +203,15 @@ void CPU::jumpOp()
     }
     else if(curCom.operation == JP)
     {
-        if(!( (flags & NEGATIVE) | (flags & ZERO) )) PC = static_cast<quint8>(curCom.operand);
+        if(( (flags & NEGATIVE) | (flags & ZERO) ) == 0) PC = static_cast<quint8>(curCom.operand);
     }
     else if(curCom.operation == JSO)
     {
         if(flags & STACK_ONE) PC = static_cast<quint8>(curCom.operand);
+    }
+    else if(curCom.operation == JSE)
+    {
+        if(flags & STACK_EMPTY) PC = static_cast<quint8>(curCom.operand);
     }
     else if(curCom.operation == JMP)
     {
@@ -203,10 +221,15 @@ void CPU::jumpOp()
 
 void CPU::init(const QVector<Command> *commands)
 {
-    for(quint8 i=0; i<commands->size() && i<dataRamBegin; i++)
+    quint16 commandsSize = static_cast<quint16>(commands->size());
+    for(quint8 i=0;i<dataRamBegin; i++)
     {
-        Command command = commands->at(i);
-        quint32 value = (static_cast<quint32>(command.operation) << 16) | command.operand;
-        memory.write(i, value);
+        if(i < commandsSize)
+        {
+            Command command = commands->at(i);
+            quint32 value = (static_cast<quint32>(command.operation) << 16) | command.operand;
+            memory.write(i, value);
+        }
+        else memory.write(i, 0);
     }
 }

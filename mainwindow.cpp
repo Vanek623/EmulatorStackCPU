@@ -24,7 +24,7 @@ void MainWindow::compile()
     if(compileResult == -1)
     {
         QVector<Command> *commands = builder.getCompiledProgramm();
-        if(commands->size() > cpu.getRAM()->size())
+        if(commands->size() > RAM_COM_CAPACITY)
         {
             QString compileResultStr = "Размер программы слишком большой!";
             QMessageBox::warning(this, "Ошибка", compileResultStr);

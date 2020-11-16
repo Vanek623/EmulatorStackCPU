@@ -35,14 +35,14 @@ void Builder::setupCommandList()
     Command commandPattern;
     QStringList list;
 
-    list<<"NOP"<<"ADDS"<<"ADDL"<<"SUB"<<"MUX"<<"SWAP"<<"DROP"<<"PUSHR"
-        <<"POPR"<<"PUSHO"<<"PUSHM"<<"POPM"<<"JZ"<<"JN"<<"JP"<<"JSO"<<"JMP";
+    list<<"NOP"<<"ADDS"<<"ADDL"<<"SUB"<<"MUX"<<"DEC"<<"INC"<<"SWAP"<<"DROP"<<"PUSHR"
+        <<"POPR"<< "COPY"<<"PUSHM"<<"POPM"<<"PUSHO"<<"JZ"<<"JN"<<"JP"<<"JSO"<<"JSE"<<"JMP";
 
     for(int i=0; i<list.size(); i++)
     {
         commandPattern.operation = static_cast<CommandName>(i);
 
-        if(commandPattern.operation > POPR) commandPattern.operand = 1;
+        if(commandPattern.operation >= PUSHO) commandPattern.operand = 1;
         else commandPattern.operand = 0;
 
         commandList.insert(list.at(i), commandPattern);

@@ -54,4 +54,5 @@ FORMS += \
     mainwindow.ui
 
 DISTFILES += \
-    Programs/Lab1.txt
+    Programs/Lab1.txt \
+    Programs/Lab2.txt

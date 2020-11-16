@@ -31,7 +31,7 @@ quint32 RAM::read(const quint8 address) const
 
 void RAM::clear()
 {
-    for(int i=0; i<capacity; i++) data[i] = 0;
+    for(int i=RAM_DATA_BEGIN; i<capacity; i++) data[i] = 0;
 }
 
 QVector<quint32> *RAM::getData()
