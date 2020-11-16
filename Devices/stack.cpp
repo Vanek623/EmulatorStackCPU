@@ -2,7 +2,7 @@
 
 Stack::Stack()
 {
-    capacity = 32;
+    capacity = STACK_CAPACITY;
     pointer = 0;
     flags = EMPTY;
 }
@@ -19,7 +19,7 @@ quint16 Stack::read() const
     return data.at(pointer);
 }
 
-quint16 Stack::pop() const
+quint16 Stack::pop()
 {
     decreasePtr();
     return read();
@@ -41,7 +41,7 @@ quint8 Stack::readFlags() const
     return flags;
 }
 
-QVector<quint16> *Stack::getData() const
+QVector<quint16> *Stack::getData()
 {
     return &data;
 }

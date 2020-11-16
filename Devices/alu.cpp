@@ -11,7 +11,7 @@ quint16 ALU::add(const quint16 a, const quint16 b)
     flags = EMPTY;
 
     if(result & 0x10000) flags |= CARRY;
-    if(reuslt == 0) flags |= ZERO;
+    if(result == 0) flags |= ZERO;
 
     return static_cast<quint16>(result);
 }
@@ -36,6 +36,16 @@ quint16 ALU::sub(const quint16 a, const quint16 b)
     if(result == 0) flags |= ZERO;
 
     return static_cast<quint16>(a - b);
+}
+
+quint32 ALU::mux(const quint16 a, const quint16 b)
+{
+    quint32 result = a*b;
+    flags = EMPTY;
+
+    if(result == 0) flags |= ZERO;
+
+    return result;
 }
 
 quint8 ALU::readFlags() const

@@ -9,6 +9,7 @@ enum CommandNames
     ADDL,
     SUB,
     MUX,
+
     SWAP,
     DROP,
     PUSHR,
@@ -16,9 +17,11 @@ enum CommandNames
     //has operand
     PUSH,
     PUSHM,
-    POP,
+    POPM,
+
     JZ,
     JN,
+    JP,
     JSO,
     JMP
 };

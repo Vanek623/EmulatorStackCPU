@@ -2,7 +2,7 @@
 
 RAM::RAM()
 {
-    capacity = 32;
+    capacity = RAM_CAPACITY;
     fillData(0);
 }
 
@@ -34,7 +34,7 @@ void RAM::clear()
     for(int i=0; i<capacity; i++) data[i] = 0;
 }
 
-QVector<quint32> *RAM::getData() const
+QVector<quint32> *RAM::getData()
 {
     return &data;
 }

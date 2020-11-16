@@ -30,20 +30,26 @@ INCLUDEPATH += \
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-        Builder/tmp.txt \
-        Widgets/tmp.txt \
-        Programs/tmp.txt \
     Devices/alu.cpp \
     Devices/stack.cpp \
     Devices/ram.cpp \
-    Devices/cpu.cpp
+    Devices/cpu.cpp \
+    mainwindow.cpp \
+    Builder/lexer.cpp
 
 HEADERS += \
-        mainwindow.h \
     Devices/alu.h \
     Devices/stack.h \
     Devices/ram.h \
     Devices/cpu.h \
     Devices/flags.h \
-    Builder/command.h
+    Builder/command.h \
+    mainwindow.h \
+    Builder/lexer.h \
+    Devices/consts.h
+
+FORMS += \
+    mainwindow.ui
+
+DISTFILES += \
+    Programs/Lab1.txt
