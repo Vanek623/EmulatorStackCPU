@@ -41,7 +41,7 @@ struct Command
     quint16 operand;
 };
 
-enum LexemeType{
+enum TokenType{
     COMMAND,
     OPERAND,
     MARK_I,
@@ -49,8 +49,8 @@ enum LexemeType{
     UNKNOWN
 };
 
-struct Lexeme
+struct Token
 {
-    LexemeType type;
+    TokenType type;
     QString value;
 };

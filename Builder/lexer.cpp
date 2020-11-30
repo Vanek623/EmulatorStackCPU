@@ -5,7 +5,7 @@ Lexer::Lexer()
 
 }
 
-QVector<Lexeme> *Lexer::parse(const QString &text)
+QVector<Token> *Lexer::parse(const QString &text)
 {
     const QString brakes = " \n:";
     QString word = "";
@@ -20,34 +20,34 @@ QVector<Lexeme> *Lexer::parse(const QString &text)
             if(sim == brakes.at(j))
             {
                 if(j == 2) word.append(sim);
-                if(!word.isEmpty()) addLexeme(word, lexemes);
+                if(!word.isEmpty()) addToken(word, tokens);
                 word = "";
                 skip = true;
             }
         }
 
         if(!skip) word.append(sim);
-        if(i == text.length() - 1 && !word.isEmpty()) addLexeme(word, lexemes);
+        if(i == text.length() - 1 && !word.isEmpty()) addToken(word, tokens);
     }
 
-    return &lexemes;
+    return &tokens;
 }
 
-void Lexer::addLexeme(const QString &word, QVector<Lexeme> &lexemes)
+void Lexer::addToken(const QString &word, QVector<Token> &lexemes)
 {
-    Lexeme lexeme;
+    Token lexeme;
     lexeme.value = word;
 
-    if(markInitExp.exactMatch(word))
+    if(markInitLexeme.exactMatch(word))
     {
         lexeme.type = MARK_I;
         QString tmp = word;
         tmp.chop(1);
         lexeme.value = tmp;
     }
-    else if(markUseExp.exactMatch(word)) lexeme.type = MARK_U;
-    else if(commandExp.exactMatch(word)) lexeme.type = COMMAND;
-    else if(operandExp.exactMatch(word))
+    else if(markUseLexeme.exactMatch(word)) lexeme.type = MARK_U;
+    else if(commandLexeme.exactMatch(word)) lexeme.type = COMMAND;
+    else if(operandLexeme.exactMatch(word))
     {
         lexeme.type = OPERAND;
         QString tmp = word;

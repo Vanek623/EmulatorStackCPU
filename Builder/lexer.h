@@ -6,21 +6,21 @@
 
 #include "structs.h"
 
-const QRegExp markInitExp = QRegExp(QString::fromUtf8("[G-Z]{1}[0-9]{1}:"));
-const QRegExp markUseExp = QRegExp(QString::fromUtf8("[G-Z]{1}[0-9]{1}"));
-const QRegExp commandExp = QRegExp(QString::fromUtf8("[A-Z]+"));
-const QRegExp operandExp = QRegExp(QString::fromUtf8("0x[0-9A-F]+"));
+const QRegExp markInitLexeme = QRegExp(QString::fromUtf8("[G-Z]{1}[0-9]{1}:"));
+const QRegExp markUseLexeme = QRegExp(QString::fromUtf8("[G-Z]{1}[0-9]{1}"));
+const QRegExp commandLexeme = QRegExp(QString::fromUtf8("[A-Z]+"));
+const QRegExp operandLexeme = QRegExp(QString::fromUtf8("0x[0-9A-F]+"));
 
 class Lexer
 {
 private:
-    QVector<Lexeme> lexemes;
+    QVector<Token> tokens;
 public:
     Lexer();
 
-    QVector<Lexeme> *parse(const QString &text);
+    QVector<Token> *parse(const QString &text);
 
 private:
-    void addLexeme(const QString &word, QVector<Lexeme> &lexemes);
+    void addToken(const QString &word, QVector<Token> &tokens);
 };
 

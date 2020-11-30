@@ -10,14 +10,13 @@ class CPU
 {
 private:
     ALU alu;
-    RAM memory;
+    RAM dataMem;
+    RAM progMem;
     Stack data;
     Stack revert;
 
     quint8 flags;
     quint8 PC;
-
-    quint8 dataRamBegin;
 
     Command curCom;
 
@@ -29,7 +28,8 @@ public:
     void reset();
 
     Stack *getStackData();
-    RAM *getRAM();
+    RAM *getDataRAM();
+    RAM *getProgRAM();
     Stack *getStackRevert();
 
     quint8 getPC() const;

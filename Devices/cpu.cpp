@@ -2,18 +2,18 @@
 
 CPU::CPU()
 {
-    memory = RAM(RAM_CAPACITY);
+    dataMem = RAM(RAM_DATA_CAPACITY);
+    progMem = RAM(RAM_COM_CAPACITY);
     data = Stack(STACK_CAPACITY);
     revert = Stack(STACK_CAPACITY);
 
     flags = 0;
     PC = 0;
-    dataRamBegin = RAM_DATA_BEGIN;
 }
 
 bool CPU::work()
 {
-    if(PC < dataRamBegin)
+    if(PC < progMem.size())
     {
         runCommand();
         PC++;
@@ -28,7 +28,7 @@ void CPU::reset()
 {
     data.clear();
     revert.clear();
-    memory.clear();
+    dataMem.clear();
     flags = data.readFlags() | alu.readFlags();
     PC = 0;
 }
@@ -38,9 +38,14 @@ Stack *CPU::getStackData()
     return &data;
 }
 
-RAM *CPU::getRAM()
+RAM *CPU::getDataRAM()
 {
-    return &memory;
+    return &dataMem;
+}
+
+RAM *CPU::getProgRAM()
+{
+    return &progMem;
 }
 
 Stack *CPU::getStackRevert()
@@ -60,7 +65,7 @@ quint8 CPU::getFlags() const
 
 void CPU::runCommand()
 {
-    quint32 word = memory.read(PC);
+    quint32 word = progMem.read(PC);
 
     curCom.operation = static_cast<CommandName>(word >> 16);
     curCom.operand = static_cast<quint16>(word & 0xFFFF);
@@ -176,14 +181,14 @@ void CPU::stackOp()
         quint16 address;
         address = data.pop();
 
-        data.push(static_cast<quint16>(memory.read(static_cast<quint8>(address))));
+        data.push(static_cast<quint16>(dataMem.read(static_cast<quint8>(address))));
     }
     else if(curCom.operation == POPM)
     {
         quint16 address;
         address = data.pop();
 
-        memory.write(static_cast<quint8>(address), data.pop());
+        dataMem.write(static_cast<quint8>(address), data.pop());
     }
     else if(curCom.operation == COPY)
     {
@@ -222,14 +227,14 @@ void CPU::jumpOp()
 void CPU::init(const QVector<Command> *commands)
 {
     quint16 commandsSize = static_cast<quint16>(commands->size());
-    for(quint8 i=0;i<dataRamBegin; i++)
+    for(quint8 i=0;i<progMem.size(); i++)
     {
         if(i < commandsSize)
         {
             Command command = commands->at(i);
             quint32 value = (static_cast<quint32>(command.operation) << 16) | command.operand;
-            memory.write(i, value);
+            progMem.write(i, value);
         }
-        else memory.write(i, 0);
+        else progMem.write(i, 0);
     }
 }

@@ -17,5 +17,5 @@ public:
 
 private:
     void setupCommandList();
-    int parse(const QVector<Lexeme> *lexemes);
+    int parse(const QVector<Token> *lexemes);
 };

@@ -50,11 +50,13 @@ private:
     void updateDataStack();
     void updateRevertStack();
     void updateFlags();
-    void updateMemory();
+    void updateDataRam();
+    void updateProgRam();
     void updatePC();
 
     QString toAnothSys(const int num, const int numSys, const int size) const;
     void showStackData(Stack *stack, QListWidget *stackWidget);
+    void showMemData(RAM *mem, QListWidget *memWidget);
 
 };
 

@@ -8,13 +8,13 @@ int Builder::compile(const QString &programTxt)
     Lexer lexer;
 
     //parse text to lexemes
-    QVector<Lexeme> *lexemes = lexer.parse(programTxt);
+    QVector<Token> *lexemes = lexer.parse(programTxt);
 
     //find mark initialize
     quint16 lineCount = 0;
     for(int i=0; i<lexemes->size(); i++)
     {
-        Lexeme lexeme = lexemes->at(i);
+        Token lexeme = lexemes->at(i);
         if(lexeme.type == MARK_I) marks.insert(lexeme.value, lineCount - 1);
         else if(lexeme.type == COMMAND) lineCount++;
     }
@@ -48,13 +48,13 @@ void Builder::setupCommandList()
         commandList.insert(list.at(i), commandPattern);
     }
 }
-int Builder::parse(const QVector<Lexeme> *lexemes)
+int Builder::parse(const QVector<Token> *lexemes)
 {
     int lineCount = 0;
-    QVector<Lexeme>::const_iterator it;
+    QVector<Token>::const_iterator it;
     for(it = lexemes->begin(); it != lexemes->end(); ++it)
     {
-        Lexeme lexeme = *it;
+        Token lexeme = *it;
 
         // if this lexeme is a mark initializer, increase counter
         if(lexeme.type == MARK_I)
@@ -69,7 +69,7 @@ int Builder::parse(const QVector<Lexeme> *lexemes)
 
             if(commandPattern.operand == 1 && it + 1 != lexemes->end())
             {
-                Lexeme operand = *(++it);
+                Token operand = *(++it);
 
                 if(operand.type == OPERAND)
                 {

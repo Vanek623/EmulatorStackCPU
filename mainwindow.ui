@@ -389,9 +389,9 @@
           <item>
            <layout class="QVBoxLayout" name="memoryLayout">
             <item>
-             <widget class="QLabel" name="memoryTitle">
+             <widget class="QLabel" name="progRamTitle">
               <property name="text">
-               <string>Память</string>
+               <string>Память команд</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -399,7 +399,20 @@
              </widget>
             </item>
             <item>
-             <widget class="QListWidget" name="memoryList"/>
+             <widget class="QListWidget" name="progRamList"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="dataRamTitle">
+              <property name="text">
+               <string>Память данных</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="dataRamList"/>
             </item>
            </layout>
           </item>

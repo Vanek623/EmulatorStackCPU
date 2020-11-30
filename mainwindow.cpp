@@ -36,7 +36,7 @@ void MainWindow::compile()
             QMessageBox::information(this, "Результат компиляции", compileResultStr);
 
             cpu.init(commands);
-            updateMemory();
+            updateProgRam();
         }
     }
     else
@@ -135,7 +135,8 @@ void MainWindow::updateCPUInfo()
 {
     updateDataStack();
     updateRevertStack();
-    updateMemory();
+    updateDataRam();
+    updateProgRam();
     updateFlags();
     updatePC();
 }
@@ -162,23 +163,14 @@ void MainWindow::updateFlags()
     }
 }
 
-void MainWindow::updateMemory()
+void MainWindow::updateDataRam()
 {
-    QListWidget *memoryWidget = ui->memoryList;
-    memoryWidget->clear();
+    showMemData(cpu.getDataRAM(), ui->dataRamList);
+}
 
-    QVector<quint32> *memory = cpu.getRAM()->getData();
-
-
-    for(int i=0; i<memory->size(); i++)
-    {
-        quint32 word = memory->at(i);
-        QString out = toAnothSys(i, 16, 2) + QString::fromUtf8(": ") +
-                      toAnothSys(word >> 16, 16, 4) + QString::fromUtf8(" ") +
-                      toAnothSys(word & 0xFFFF, 16, 4);
-
-        memoryWidget->addItem(out);
-    }
+void MainWindow::updateProgRam()
+{
+    showMemData(cpu.getProgRAM(), ui->progRamList);
 }
 
 void MainWindow::updatePC()
@@ -208,5 +200,23 @@ void MainWindow::showStackData(Stack *stack, QListWidget *stackWidget)
 
             stackWidget->addItem(out);
         }
+    }
+}
+
+void MainWindow::showMemData(RAM *mem, QListWidget *memWidget)
+{
+    QListWidget *memoryWidget = memWidget;
+    memoryWidget->clear();
+
+    QVector<quint32> *memory = mem->getData();
+
+    for(int i=0; i<memory->size(); i++)
+    {
+        quint32 word = memory->at(i);
+        QString out = toAnothSys(i, 16, 2) + QString::fromUtf8(": ") +
+                      toAnothSys(word >> 16, 16, 4) + QString::fromUtf8(" ") +
+                      toAnothSys(word & 0xFFFF, 16, 4);
+
+        memoryWidget->addItem(out);
     }
 }
